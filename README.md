@@ -1,4 +1,4 @@
-##🏢 Software House OS
+## 🏢 Software House OS
 
 A comprehensive, role-based Project and Task Management operating system designed specifically for software development agencies. This system serves as a custom-tailored alternative to Jira or Trello, enforcing a strict, professional pipeline from project creation to Quality Assurance (QA) delivery.
 
