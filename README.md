@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+markdown_content = """# 🏢 Software House OS
 
-## Getting Started
+A comprehensive, role-based Project and Task Management operating system designed specifically for software development agencies. This system serves as a custom-tailored alternative to Jira or Trello, enforcing a strict, professional pipeline from project creation to Quality Assurance (QA) delivery.
 
-First, run the development server:
+## ✨ Key Features & Workflows
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This application enforces a strict, real-world software development lifecycle across 5 distinct user roles:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+* **👑 Admin Hub:** A central command matrix to manage the user directory, promote team members into specific roles, and oversee all agency operations.
+* **📊 Project Manager (PM) Dashboard:** Executive transparency featuring agency-wide KPIs, global chronological activity feeds, and a granular Project Explorer to track exactly what features are being built.
+* **🎯 Team Lead Workspace:** A dynamic task delegation board to monitor pending PM requests and assign tickets to specific developers based on nearest deadlines.
+* **💻 Developer Kanban Board:** An interactive, drag-and-drop Kanban board (`Assigned` → `Working On` → `Ready for Testing`). Includes dynamic red-alert kickbacks if QA rejects a feature.
+* **🧪 Tester (QA) Master-Detail View:** A split-screen testing environment. Testers can approve features for deployment or hit "Fail" to instantly log a bug report and warp the task back to the original developer's active board.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+* **Framework:** [Next.js 15](https://nextjs.org/) (App Router, Server Actions)
+* **Language:** [TypeScript](https://www.typescriptlang.org/)
+* **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+* **Database:** [PostgreSQL](https://www.postgresql.org/) (Hosted on Supabase)
+* **ORM:** [Prisma](https://www.prisma.io/)
+* **Authentication:** [Clerk](https://clerk.com/) (with Svix Webhooks for DB syncing)
 
-## Learn More
+## 🗄️ Database Schema Overview
 
-To learn more about Next.js, take a look at the following resources:
+* **User:** Stores user metadata, roles (`ADMIN`, `PM`, `TEAM_LEAD`, `DEV`, `TESTER`), and authentication IDs.
+* **Project:** Groups tasks together, tracked by `status` (Active, Completed, On Hold).
+* **Task:** The core unit of work. Tracks assignments, priority, current tag (column status), and deadline.
+* **TaskHistory:** An immutable ledger that logs exactly who did what, and when. Powers the global activity feed and QA bug reporting.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

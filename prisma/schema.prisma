@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+
+}
+
+// 1. Enums
+enum UserRole {
+  ADMIN
+  PM
+  TEAM_LEAD
+  DEV
+  TESTER
+}
+
+enum PriorityLevel {
+  LOW
+  NORMAL
+  HIGH
+}
+
+enum CreatorSource {
+  PM_CHOICE
+  CLIENT_CHOICE
+  GENERAL
+}
+
+
+enum ProjectStatus {
+  ACTIVE
+  COMPLETED
+  ON_HOLD
+  TESTING
+  TESTED
+}
+
+// 2. Users Table
+model User {
+  id    String   @id @default(cuid())
+  name  String
+  email String   @unique
+  role  UserRole
+
+  createdAt      DateTime      @default(now())
+  
+  // Relations
+  createdTasks   Task[]        @relation("CreatedBy")
+  teamLeadTasks  Task[]        @relation("TeamLead")
+  assignedTasks  Task[]        @relation("AssignedTo")
+  createdProjects Project[] @relation("ProjectManager")
+  historyRecords TaskHistory[]
+}
+
+// --- NEW PROJECT MODEL ---
+model Project {
+  id          String        @id @default(uuid()) @db.Uuid
+  name        String
+  description String?       @db.Text
+  status      ProjectStatus @default(ACTIVE)
+
+  // Ownership
+  createdById String
+  createdBy   User          @relation("ProjectManager", fields: [createdById], references: [id], onDelete: Restrict)
+
+  // A project has many tasks
+  tasks       Task[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// --- UPDATED TASK MODEL ---
+model Task {
+  id          String @id @default(uuid()) @db.Uuid
+  title       String
+  description String @db.Text
+  
+  // Update this to link to the Project model
+  projectId   String @db.Uuid
+  project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  // Ownership & Handoffs
+  createdById   String        
+  createdBy     User          @relation("CreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+  creatorSource CreatorSource
+
+  teamLeadId String           
+  teamLead   User   @relation("TeamLead", fields: [teamLeadId], references: [id], onDelete: Restrict)
+
+  assignedToId String?         
+  assignedTo   User?  @relation("AssignedTo", fields: [assignedToId], references: [id])
+
+  // State & Tracking
+  tags     String[] 
+  priority PriorityLevel @default(NORMAL)
+  deadline DateTime?
+
+  attachments Json? @default("[]")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt 
+
+  history TaskHistory[]
+}
+
+// 4. Task History Table
+model TaskHistory {
+  id     String @id @default(uuid()) @db.Uuid
+  
+  taskId String @db.Uuid
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  userId String?        // REMOVED @db.Uuid
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  action    String
+  timestamp DateTime @default(now())
+}
