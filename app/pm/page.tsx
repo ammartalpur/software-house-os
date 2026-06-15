@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import prisma from "@/app/lib/db";
 import ProjectForm from "@/components/project/ProjectForm";
+import DeleteProjectButton from "@/components/project/DeleteProjectButton"; 
 import Link from "next/link";
 
 export default async function PMDashboard() {
@@ -39,7 +40,7 @@ export default async function PMDashboard() {
               Manage your software house projects.
             </p>
           </div>
-          <ProjectForm currentUserId={userId} />
+          <ProjectForm currentUserId={dbUser.id} />
         </div>
 
         {/* Right Column: Project List */}
@@ -68,7 +69,8 @@ export default async function PMDashboard() {
                     key={project.id}
                     className="p-6 hover:bg-gray-50 transition-colors"
                   >
-                    <div className="flex justify-between items-start">
+                    {/* Added items-start and justify-between so the button sits on the right */}
+                    <div className="flex justify-between items-start gap-4">
                       <div>
                         <h3 className="text-lg font-medium text-gray-900">
                           {project.name}
@@ -78,7 +80,7 @@ export default async function PMDashboard() {
                             {project.description}
                           </p>
                         )}
-                        <div className="mt-4 flex gap-4 text-xs font-medium text-gray-500">
+                        <div className="mt-4 flex flex-wrap gap-3 text-xs font-medium text-gray-500">
                           <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">
                             {project.status}
                           </span>
@@ -86,9 +88,15 @@ export default async function PMDashboard() {
                             {project._count.tasks} Tasks
                           </span>
                           <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded font-mono">
-                            ID: {project.id}
+                            ID: {project.id.split("-")[0]}{" "}
+                            {/* Shortened the ID visually */}
                           </span>
                         </div>
+                      </div>
+
+                      {/* --- THE DELETE BUTTON --- */}
+                      <div className="shrink-0">
+                        <DeleteProjectButton projectId={project.id} />
                       </div>
                     </div>
                   </li>

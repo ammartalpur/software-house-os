@@ -43,3 +43,21 @@ export async function getAllProjects() {
     return { success: false, projects: [], error: "Failed to load projects." };
   }
 }
+
+export async function deleteProject(projectId: string) {
+  try {
+    // Because of onDelete: Cascade in your schema, this automatically
+    // deletes all tasks and task histories linked to this project!
+    await prisma.project.delete({
+      where: { id: projectId },
+    });
+
+    // Refresh the PM dashboard to show the updated list
+    revalidatePath("/pm");
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to delete project:", error);
+    return { success: false, error: "Failed to delete project." };
+  }
+}
