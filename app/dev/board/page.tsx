@@ -20,7 +20,6 @@ export default async function DeveloperBoardPage() {
   }
 
   // Fetch all tasks assigned to this developer
-  // Fetch all tasks assigned to this developer
   const myTasks = await prisma.task.findMany({
     where: { assignedToId: dbUser.id },
     select: {
