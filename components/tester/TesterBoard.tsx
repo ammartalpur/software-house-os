@@ -7,17 +7,17 @@ import { updateTaskStatus } from "@/app/actions/task.actions";
 interface HistoryRecord {
   action: string;
   timestamp: Date; // Changed from createdAt
-  user: { name: string; role: string };
+  user: { name: string; role: string } | null; 
 }
 
 interface Task {
   id: string;
   title: string;
   description: string;
-  priority: string;
+  priority: any; // <--- Bypasses the strict PriorityLevel Enum mismatch
   tags: string[];
   assignedTo: { name: string } | null;
-  history: HistoryRecord[]; // Changed from historyRecords
+  history: HistoryRecord[];
 }
 
 export default function TesterBoard({

@@ -43,8 +43,8 @@ export default function TaskForm({
     const teamLeadId = isTeamLead ? currentUserId : teamLeadInput;
 
     // If we are a team lead AND we actually selected a dev, use the ID. Otherwise, null.
-    const assignedToId =
-      isTeamLead && assignedToInput !== "" ? assignedToInput : null;
+  const assignedToId =
+    isTeamLead && assignedToInput !== "" ? assignedToInput : undefined;
 
     const result = await createTask({
       title: formData.get("title") as string,
