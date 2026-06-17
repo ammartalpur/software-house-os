@@ -19,7 +19,6 @@ export default async function DeveloperBoardPage() {
     redirect("/");
   }
 
-  // Fetch all tasks assigned to this developer
   const myTasks = await prisma.task.findMany({
     where: { assignedToId: dbUser.id },
     select: {
@@ -29,6 +28,8 @@ export default async function DeveloperBoardPage() {
       priority: true,
       tags: true,
       projectId: true,
+      createdAt: true, // NEW: Needed for calendar "Given Date"
+      deadline: true, // NEW: Needed for calendar "Deadline Date"
       history: {
         orderBy: { timestamp: "desc" },
         take: 1,
@@ -41,14 +42,14 @@ export default async function DeveloperBoardPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-100 p-4 lg:p-8">
+      <div className="max-w-400 mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
             Developer Workspace
           </h1>
           <p className="text-gray-500 mt-1">
-            Drag and drop tasks to update their status.
+            Manage your active tasks and upcoming deadlines.
           </p>
         </div>
 
